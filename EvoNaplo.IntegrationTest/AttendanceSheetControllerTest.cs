@@ -72,7 +72,7 @@ namespace EvoNaplo.IntegrationTest
         public async Task EditAttendanceSheet()
         {
             //Arrange
-            await fillAtendanceSheet();
+            await FillAtendanceSheet();
 
             AttendanceSheet testSheet= _evoNaploContext.AttendanceSheets.First();
             DateTime testDate = testSheet.MeetingDate;
@@ -86,10 +86,10 @@ namespace EvoNaplo.IntegrationTest
             Assert.AreNotEqual(testDate, _evoNaploContext.AttendanceSheets.First(s => s.Id == testSheet.Id).MeetingDate);
         }
         [Test]
-        public async Task DeleteProject()
+        public async Task DeleteAttendanceSheet()
         {
             //Arrange
-            await fillAtendanceSheet();
+            await FillAtendanceSheet();
 
             AttendanceSheet testSheet = _evoNaploContext.AttendanceSheets.First();
             int testid = testSheet.Id;
@@ -104,7 +104,7 @@ namespace EvoNaplo.IntegrationTest
 
 
         }
-        public async Task fillAtendanceSheet()
+        public async Task FillAtendanceSheet()
         {
             Semester semester = new()
             {
