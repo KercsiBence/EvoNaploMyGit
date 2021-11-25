@@ -85,6 +85,25 @@ namespace EvoNaplo.IntegrationTest
             //Assert
             Assert.AreNotEqual(testDate, _evoNaploContext.AttendanceSheets.First(s => s.Id == testSheet.Id).MeetingDate);
         }
+        [Test]
+        public async Task DeleteProject()
+        {
+            //Arrange
+            await fillAtendanceSheet();
+
+            AttendanceSheet testSheet = _evoNaploContext.AttendanceSheets.First();
+            int testid = testSheet.Id;
+
+            //Act
+            await _attendanceSheetController.DeleteAttendanceSheet(testSheet.Id);
+            _evoNaploContext.SaveChanges();
+
+            //Assert
+            Assert.IsFalse(_evoNaploContext.AttendanceSheets.Select(s=>s.Id).ToList().Contains(testid));
+
+
+
+        }
         public async Task fillAtendanceSheet()
         {
             Semester semester = new()

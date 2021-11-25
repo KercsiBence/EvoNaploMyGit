@@ -40,7 +40,7 @@ namespace EvoNaplo.Controllers
         }
 
         [HttpDelete("DELETE")]
-        public async Task<int> DeleteProject(int id)
+        public async Task<int> DeleteAttendanceSheet(int id)
         {
             await _attendanceSheetService.DeleteAttendanceSheet(id);
             return StatusCodes.Status200OK;
