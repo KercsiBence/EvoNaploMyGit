@@ -38,7 +38,55 @@ namespace EvoNaplo.IntegrationTest
         [Test]
         public async Task GetAttendanceSheets_with_2_data()
         {
+            await fillAtendanceSheet();
+
+            //Act
+            IEnumerable<AttendanceSheetDTO> actualSheets = _attendanceSheetController.GetAttendanceSheets();
+
+            //Assert
+            Assert.AreEqual(2, actualSheets.Count());
+
+        }
+        [Test]
+        public async Task AddAttendanceSheet_ValidData()
+        {
             //Arrange
+            int expectedNumberOfAttendanceSheets = _evoNaploContext.AttendanceSheets.ToList().Count() + 1;
+            AttendanceSheet attendanceSheet = new()
+            {
+                Id = 3,
+                MeetingDate = new DateTime(2021, 6, 4),
+                ProjectId = 1
+            };
+
+            //Act
+            await _attendanceSheetController.PostAddAttendanceSheet(attendanceSheet);
+
+            //Assert
+            int actualNumberOfAttendanceSheets = _evoNaploContext.AttendanceSheets.ToList().Count();
+            Assert.AreEqual(expectedNumberOfAttendanceSheets, actualNumberOfAttendanceSheets);
+            Assert.True(_evoNaploContext.AttendanceSheets.Last() == attendanceSheet);
+
+        }
+        [Test]
+        public async Task EditAttendanceSheet()
+        {
+            //Arrange
+            await fillAtendanceSheet();
+
+            AttendanceSheet testSheet= _evoNaploContext.AttendanceSheets.First();
+            DateTime testDate = testSheet.MeetingDate;
+            testSheet.MeetingDate = new DateTime(2021, 9, 29);
+
+            //Act
+            await _attendanceSheetController.EditAttendanceSheet(testSheet);
+            _evoNaploContext.SaveChanges();
+
+            //Assert
+            Assert.AreNotEqual(testDate, _evoNaploContext.AttendanceSheets.First(s => s.Id == testSheet.Id).MeetingDate);
+        }
+        public async Task fillAtendanceSheet()
+        {
             Semester semester = new()
             {
                 Id = 1,
@@ -76,34 +124,6 @@ namespace EvoNaplo.IntegrationTest
             sheets.Add(sheet2);
             await _evoNaploContext.AttendanceSheets.AddRangeAsync(sheets);
             _evoNaploContext.SaveChanges();
-
-            //Act
-            IEnumerable<AttendanceSheetDTO> actualSheets = _attendanceSheetController.GetAttendanceSheets();
-
-            //Assert
-            Assert.AreEqual(2, actualSheets.Count());
-
-        }
-        [Test]
-        public async Task AddAttendanceSheet_ValidData()
-        {
-            //Arrange
-            int expectedNumberOfAttendanceSheets = _evoNaploContext.AttendanceSheets.ToList().Count() + 1;
-            AttendanceSheet attendanceSheet = new()
-            {
-                Id = 3,
-                MeetingDate = new DateTime(2021, 6, 4),
-                ProjectId = 1
-            };
-
-            //Act
-            await _attendanceSheetController.PostAddAttendanceSheet(attendanceSheet);
-
-            //Assert
-            int actualNumberOfAttendanceSheets = _evoNaploContext.AttendanceSheets.ToList().Count();
-            Assert.AreEqual(expectedNumberOfAttendanceSheets, actualNumberOfAttendanceSheets);
-            Assert.True(_evoNaploContext.AttendanceSheets.Last() == attendanceSheet);
-
         }
     }
 }
