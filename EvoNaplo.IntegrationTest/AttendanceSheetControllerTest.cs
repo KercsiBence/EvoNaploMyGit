@@ -74,7 +74,10 @@ namespace EvoNaplo.IntegrationTest
             //Arrange
             await FillAtendanceSheet();
 
-            AttendanceSheet testSheet= _evoNaploContext.AttendanceSheets.First();
+            AttendanceSheet testSheet = new();
+
+            testSheet.Id = 1;
+            testSheet.ProjectId = 1;
             DateTime testDate = testSheet.MeetingDate;
             testSheet.MeetingDate = new DateTime(2021, 9, 29);
 

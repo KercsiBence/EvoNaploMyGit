@@ -115,10 +115,11 @@ namespace EvoNaplo.IntegrationTest
             Semester semester = TestSemester();
             _evoNaploContext.Semesters.Add(semester);
             _evoNaploContext.SaveChanges();
-            semester.IsAppliable = false;
+            Semester semester1 = new(semester);
+            semester1.IsAppliable = false;
 
             //Act
-            await _semesterController.EditSemester(semester);
+            await _semesterController.EditSemester(semester1);
             _evoNaploContext.SaveChanges();
 
             //Assert
