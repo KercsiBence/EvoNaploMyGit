@@ -38,7 +38,7 @@ namespace EvoNaplo.IntegrationTest
         [Test]
         public async Task GetAttendanceSheets_with_2_data()
         {
-            await fillAtendanceSheet();
+            await FillAtendanceSheet();
 
             //Act
             IEnumerable<AttendanceSheetDTO> actualSheets = _attendanceSheetController.GetAttendanceSheets();
